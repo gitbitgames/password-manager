@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from random import randint
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -12,8 +13,18 @@ def generate_password():
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def add_password():
-    with open('saved.csv', 'a') as f:
-        f.write(f'\n{entry1.get()},{entry2.get()},{entry3.get()}')
+    website, email, password = entry1.get(), entry2.get(), entry3.get()
+    if len(website) == 0 or len(password) == 0:
+        messagebox.showinfo(title='Oops', message="Please make sure to fill in all fields.")
+
+    is_ok = messagebox.askokcancel(title=website, message=f"These are the details you entered: \nEmail:{email} \nPassword:{password}\nDo you want to save?")
+    
+    if is_ok:
+        with open('saved.csv', 'a') as f:
+            f.write(f'\n{entry1.get()},{entry2.get()},{entry3.get()}')
+        entry1.delete(0, tk.END)
+        entry2.delete(0, tk.END)
+        entry3.delete(0, tk.END)
 
 # ---------------------------- UI SETUP ------------------------------- #
 
