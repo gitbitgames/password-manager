@@ -45,7 +45,14 @@ def add_password():
         entry2.delete(0, tk.END)
         entry3.delete(0, tk.END)
 
-        
+def search_password():
+    website = entry1.get()
+    with open('data.json', 'r') as data_file:
+        data = json.load(data_file)
+        if website in data:
+            entry2.insert(0, data[website]['email'])
+            entry3.insert(0, data[website]['password'])
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -59,22 +66,24 @@ canvas.create_image(100, 100, image=logo_img)
 
 
 label1 = tk.Label(text="Website:")
-entry1 = tk.Entry(width=38)
+entry1 = tk.Entry(width=21)
 label2 = tk.Label(text="Email/Username:")
 entry2 = tk.Entry(width=38)
 label3 = tk.Label(text="Password:")
 entry3 = tk.Entry(width=21)
 
+search_button = tk.Button(text="Search", width=13, command=search_password)
 generate_button = tk.Button(text="Generate Password", command=generate_password)
 add_button = tk.Button(text="Add", width=36, command=add_password)
 
 canvas.grid(column=1, row=0)
 label1.grid(column=0, row=1)
-entry1.grid(column=1, row=1, columnspan=2)
+entry1.grid(column=1, row=1)
 label2.grid(column=0, row=2)
 entry2.grid(column=1, row=2, columnspan=2)
 label3.grid(column=0, row=3)
 entry3.grid(column=1, row=3)
+search_button.grid(column=2, row=1)
 generate_button.grid(column=2, row=3)
 add_button.grid(column=1, row=4, columnspan=2)
 
