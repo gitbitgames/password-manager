@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from random import randint
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -17,14 +18,34 @@ def add_password():
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title='Oops', message="Please make sure to fill in all fields.")
 
+    new_data = {
+        website: {
+            "email": email,
+            "password": password,
+        }
+    }
+
     is_ok = messagebox.askokcancel(title=website, message=f"These are the details you entered: \nEmail:{email} \nPassword:{password}\nDo you want to save?")
-    
+
     if is_ok:
-        with open('saved.csv', 'a') as f:
-            f.write(f'\n{entry1.get()},{entry2.get()},{entry3.get()}')
+        try:
+            with open('data.json', 'r') as data_file:
+                data = json.load(data_file)
+
+        except FileNotFoundError:
+            with open('data.json', 'w') as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
+            data.update(new_data)
+
+            with open("data.json", "w") as data_file:
+                json.dump(data, data_file, indent=4)
+
         entry1.delete(0, tk.END)
         entry2.delete(0, tk.END)
         entry3.delete(0, tk.END)
+
+        
 
 # ---------------------------- UI SETUP ------------------------------- #
 
